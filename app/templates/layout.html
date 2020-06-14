@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>{{ title }} - Page</title>
+	<head>
+	<a href="{{ url_for('home') }}">Home</a>
+	<a href="{{ url_for('about') }}">About Page</a>
+	<a href="{{ url_for('workout') }}">Workouts</a>
+	<a href="{{ url_for('login') }}">Login</a>
+	<a href="{{ url_for('register') }}">Register</a>
 </head>
 <body>
 <h1>{{  title  }} Page</h1>
