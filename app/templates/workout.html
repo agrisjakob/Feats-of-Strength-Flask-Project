@@ -3,13 +3,9 @@
 {% block body_content %}
 <div class='form'>
 	<form method='POST' action=''>
-		{% if user_has_workout %}
-		{% for workout in post %}
-		<h2>{{ post.workoutid }}<h2>
-				{% endfor %}
-				{% endif %}
-			{{form.hidden_tag() }}
-
+	{% for w in workout %}
+	<h1> {{ w }} </h1>
+	{% endfor %}
 
 
 {% endblock %}

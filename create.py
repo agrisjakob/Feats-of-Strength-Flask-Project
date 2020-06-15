@@ -1,3 +1,4 @@
+
 from app import db
 from app.models import Users, Workout, ExercisesInWorkout, Exercises
 
@@ -22,4 +23,3 @@ db.session.add(exercise6)
 db.session.add(exercise7)
 
 db.session.commit()
-

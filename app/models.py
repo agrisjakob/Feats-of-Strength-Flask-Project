@@ -1,5 +1,6 @@
+
 from app import db, login_manager
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from datetime import datetime
 
 @login_manager.user_loader
@@ -31,8 +32,10 @@ class Workout(db.Model):
     workoutid = db.Column(db.Integer, primary_key = True)
     userid = db.Column(db.Integer, db.ForeignKey('users.userid'), nullable=False)
     startDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    completionDate = db.Column(db.DateTime, nullable=False, default='Not Finished Yet')
-    
+    def create(self):
+        new_workout = self(userid = current_user.userid)
+        db.session.add(new_workout)
+        db.session.commit()
     def __repr__(self):
         return ''.join([
             'WorkoutID: ',self.workoutid, " UserID:  ",  self.userid,  '\r\n',

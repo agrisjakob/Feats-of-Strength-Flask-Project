@@ -61,5 +61,7 @@ def logout():
 @app.route('/workout', methods=['GET','POST'])
 @login_required
 def workout():
-    return render_template('workout.html', title = 'Workout', form=form, post= workoutData)
+    Workout.create(Workout)
+    form = WorkoutForm()
+    return render_template('workout.html', title = 'Workout', form=form)
 
