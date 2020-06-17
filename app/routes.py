@@ -2,7 +2,7 @@
 from flask import render_template, redirect, url_for, request
 from app import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
-from app.models import Users, Workout
+from app.models import Users, Workout, Exercises, ExercisesInWorkout
 from app.forms import RegistrationForm, LoginForm, WorkoutForm
 from datetime import datetime
 
@@ -62,6 +62,15 @@ def logout():
 @login_required
 def workout():
     Workout.create(Workout)
+    workouts = Workout.query.filter_by(userid= current_user.userid).all()
+    userLevel = Users.query.filter_by(userid = current_user.userid).first().level
+    exercises = Exercises.query.all()
+    for workout in workouts:
+        if workout.userid == current_user.userid:
+            for exercise in exercises:
+                if exercise.exerciseid <= userLevel:
+                    workout.work.append(exercise)
+                    db.session.commit()
     form = WorkoutForm()
-    return render_template('workout.html', title = 'Workout', form=form)
+    return render_template('workout.html', title= 'Workout', posts=userLevel)
 
