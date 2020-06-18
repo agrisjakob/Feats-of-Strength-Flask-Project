@@ -6,6 +6,27 @@ from app.models import Users, Workout, Exercises, ExercisesInWorkout
 from app.forms import RegistrationForm, LoginForm, WorkoutForm
 from datetime import datetime
 
+def add_exercises():
+    userLevel =Users.query.filter_by(userid = current_user.userid).first().level
+    currentWorkout = Workout.query.filter_by(userid= current_user.userid).order_by(Workout.workoutid.desc()).first()
+    if userLevel > 2:
+            exercise1 = Exercises.query.filter_by(exerciseid=userLevel-2).first()
+            exercise2 = Exercises.query.filter_by(exerciseid=userLevel-1).first()
+            exercise3 = Exercises.query.filter_by(exerciseid=userLevel).first()
+            currentWorkout.workout.append(exercise1)
+            currentWorkout.workout.append(exercise2)
+            currentWorkout.workout.append(exercise3)
+            db.session.commit()
+    elif userLevel == 2:
+            exercise1 = Exercises.query.filter_by(exerciseid=userLevel-1).first()
+            exercise2 = Exercises.query.filter_by(exerciseid=userLevel).first()
+            currentWorkout.workout.append(exercise1)
+            currentWorkout.workout.append(exercise2)
+            db.session.commit()
+    elif userLevel ==1:
+            exercise1 = Exercises.query.filter_by(exerciseid=userLevel).first()
+            currentWorkout.workout.append(exercise1)
+
 @app.route('/')
 @app.route('/home/')
 def home():
@@ -31,8 +52,9 @@ def register():
         
         
         db.session.add(user)
+        
         db.session.commit()
-
+        
         return redirect(url_for('login'))
     return render_template('register.html', title = 'Register', form=form)
 
@@ -61,12 +83,22 @@ def logout():
 @app.route('/workout', methods=['GET','POST'])
 @login_required
 def workout():
-    Workout.create(Workout)
-    p1 = Workout.query.filter_by(userid= current_user.userid).first()
-    c1 = Exercises.query.filter_by(exerciseid=1).first()
-    p1.workout.append(c1)
-    db.session.commit()
-    userLevel = 1
+    userLevel =Users.query.filter_by(userid = current_user.userid).first().level
+    currentWorkout = Workout.query.filter_by(userid= current_user.userid).order_by(Workout.workoutid.desc()).first()
+    
+    if not currentWorkout:
+        Workout.create(Workout)
+        add_exercises()
+        return redirect(url_for('workout'))
+    
+    lastFinishedExercise = ExercisesInWorkout.query.filter_by(workoutid = currentWorkout.workoutid).order_by(ExercisesInWorkout.workoutid.desc()).first().reps_completed 
+    
+    if lastFinishedExercise > 0:
+        Workout.create(Workout)
+        add_exercises()
+        return redirect(url_for('workout'))
+
+
     form = WorkoutForm()
     return render_template('workout.html', title= 'Workout', posts=userLevel)
 
