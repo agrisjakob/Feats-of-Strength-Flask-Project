@@ -98,7 +98,82 @@ def workout():
         add_exercises()
         return redirect(url_for('workout'))
 
+    getExercises = ExercisesInWorkout.query.filter_by(workoutid = currentWorkout.workoutid).all()
+    index =1
+    for exercise in getExercises:
+        if len(getExercises) == 3:
+            if index == 1:
+                exercise1 = exercise.exerciseid
+                index += 1
+                continue
+            elif index ==2:
+                exercise2 = exercise.exerciseid
+                index +=1
+                continue
+            elif index ==3:
+                exercise3 = exercise.exerciseid
+                break
+        elif len(getExercises) == 2:
+            if index == 1:
+                exercise1 = exercise.exerciseid
+                index += 1
+                continue
+            elif index ==2:
+                exercise2 = exercise.exerciseid
+                exercise3 = exercise.exerciseid
+                break
+        elif len(getExercises) == 1:
+                exercise1 = exercise.exerciseid
+                exercise2 = exercise.exerciseid
+                exercise3 = exercise.exerciseid
+    
+    exercise1 = Exercises.query.filter_by(exerciseid = exercise1).first().exercise
+    exercise2 = Exercises.query.filter_by(exerciseid = exercise2).first().exercise
+    exercise3 = Exercises.query.filter_by(exerciseid = exercise3).first().exercise
+
+
 
     form = WorkoutForm()
-    return render_template('workout.html', title= 'Workout', posts=userLevel)
+    if form.validate_on_submit():
+        set1 = form.set1.data
+        set2 = form.set2.data
+        set3 = form.set3.data
+        index = 1
+        for exercise in getExercises:
+            if len(getExercises) == 3:
+                if index == 1:
+                    exercise.reps_completed = set1
+                    index +=1
+                    continue
+                elif index == 2:
+                    exercise.reps_completed = set2
+                    index += 1
+                    continue
+                elif index == 3:
+                    exercise.reps_completed = set3
+                    break
+            elif len(getExercises) == 2:
+                if index == 1:
+                    exercise.reps_completed = set1
+                    index += 1
+                    continue
+                elif index == 2:
+                    if set2 > set3:
+                        exercise.reps_completed = set2
+                        break
+                    else:
+                        exercise.reps_completed = set3
+                        break
+            elif len(getExercises) == 1:
+                if set1 >set2 and set1 > set3:
+                    exercise.reps_completed = set1
+                elif set2 > set1 and set2 > set3:
+                    exercise.reps_completed = set2
+                else:
+                    exercise.reps_completed = set3
+        db.session.commit()
+        return redirect(url_for('home'))
+
+
+    return render_template('workout.html', title= 'Workout', posts=userLevel, form=form, exercise1=exercise1, exercise2=exercise2, exercise3=exercise3)
 

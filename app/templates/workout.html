@@ -3,10 +3,38 @@
 {% block body_content %}
 <div class='form'>
 	<form method='POST' action=''>
-		<h2>{{ posts }} <h2>
+		{{ form.hidden_tag() }}
+	Set 1:	{{ exercise1 }}<br> {{ form.set1.label }}
+		{{ form.set1 }}
+		{% if form.set1.errors %}
+		<div class= "error">
+			{% for error in form.set1.errors %}
+			<span> {{error}} </span>
+			{% endfor %}
+		{% endif %}
+		</div>
+	Set 2:	{{ exercise2 }}<br> {{ form.set2.label }}
+                {{ form.set2 }}
+                {% if form.set2.errors %}
+                <div class= "error">
+                        {% for error in form.set2.errors %}
+                        <span> {{error}} </span>
+                        {% endfor %}
+                {% endif %}
+                </div>
+		<div>
+	Set 3:		{{ exercise3 }}<br> {{ form.set3.label }}
+                {{ form.set3 }}
+                {% if form.set3.errors %}
+                <div class= "error">
+                        {% for error in form.set3.errors %}
+                        <span> {{error}} </span>
+                        {% endfor %}
+                {% endif %}
+                </div>
+	        
+		<br>{{ form.submit }}
 		
-
-
 
 {% endblock %}
 </body>

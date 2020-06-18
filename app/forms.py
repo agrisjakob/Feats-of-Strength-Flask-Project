@@ -2,8 +2,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField, DateField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from app.models import Users
-from flask_login import current_user
+from app.models import Users, Workout, Exercises, ExercisesInWorkout
+from flask_login import login_user, current_user, logout_user
 
 class RegistrationForm(FlaskForm):
     username=StringField('Username',validators = [DataRequired()])
@@ -19,16 +19,24 @@ class RegistrationForm(FlaskForm):
 
 
 class WorkoutForm(FlaskForm):
-    exercise = StringField('Exercise')
-    reps = IntegerField('Reps',
+
+    set1 = IntegerField(" Enter your completed reps:",
             validators = [DataRequired()]
             )
-    
+
+    set2 = IntegerField(" Enter your completed reps:",
+            validators = [DataRequired()]
+            )
+
+    set3 = IntegerField(" Enter your completed reps:",
+            validators = [DataRequired()]
+            )
     submit = SubmitField('Finish workout')
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    exercise = "pushups"
+    username = StringField('Username:', validators=[DataRequired()])
+    password = PasswordField('Password:', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
