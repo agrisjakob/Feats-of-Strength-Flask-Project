@@ -62,15 +62,11 @@ def logout():
 @login_required
 def workout():
     Workout.create(Workout)
-    workouts = Workout.query.filter_by(userid= current_user.userid).all()
-    userLevel = Users.query.filter_by(userid = current_user.userid).first().level
-    exercises = Exercises.query.all()
-    for workout in workouts:
-        if workout.userid == current_user.userid:
-            for exercise in exercises:
-                if exercise.exerciseid <= userLevel:
-                    workout.work.append(exercise)
-                    db.session.commit()
+    p1 = Workout.query.filter_by(userid= current_user.userid).first()
+    c1 = Exercises.query.filter_by(exerciseid=1).first()
+    p1.workout.append(c1)
+    db.session.commit()
+    userLevel = 1
     form = WorkoutForm()
     return render_template('workout.html', title= 'Workout', posts=userLevel)
 

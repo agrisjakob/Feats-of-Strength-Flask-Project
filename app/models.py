@@ -36,6 +36,7 @@ class Workout(db.Model):
         new_workout = self(userid = current_user.userid)
         db.session.add(new_workout)
         db.session.commit()
+    workout = db.relationship("Exercises", secondary="exercises_in_workout")
     def __repr__(self):
         return ''.join([
             'WorkoutID: ',self.workoutid, " UserID:  ",  self.userid,  '\r\n'
@@ -43,22 +44,18 @@ class Workout(db.Model):
             ])
 
 
-class ExercisesInWorkout(db.Model):
-    ex = db.Column(db.Integer, primary_key = True)
-    
-    
-middle = db.Table('middle', 
-    db.Column('workoutid',db.Integer, db.ForeignKey('workout.workoutid'), nullable=False),
-    db.Column('exerciseid',db.Integer, db.ForeignKey('exercises.exerciseid'), nullable=False),
-    db.Column('reps_completed',db.Integer, nullable=False, default =0)
-)
-
-
 class Exercises(db.Model):
     exerciseid = db.Column(db.Integer, primary_key = True)
     exercise = db.Column(db.String(30), nullable= False)
     threshold = db.Column(db.Integer, nullable=False, default = 20)
-    workout = db.relationship("Workout", secondary=middle, backref =db.backref("work", lazy = 'dynamic'))
     def __repr__(self):
         return "".join([
             "ExerciseID: ", self.exerciseid, " Exercise: ", self.exercise, " Threshold: ", self.threshold])
+
+
+class ExercisesInWorkout(db.Model):
+    workoutid = db.Column(db.Integer, db.ForeignKey('workout.workoutid'), nullable=False, primary_key=True)
+    exerciseid = db.Column(db.Integer, db.ForeignKey('exercises.exerciseid'), nullable=False, primary_key=True)
+    reps_completed = db.Column(db.Integer, nullable=False, default =0)
+    userWorkout = db.relationship("Workout", backref=db.backref("userworkout", lazy = 'dynamic'))
+    userExercise = db.relationship("Exercises", backref=db.backref("userexercise", lazy = 'dynamic'))
