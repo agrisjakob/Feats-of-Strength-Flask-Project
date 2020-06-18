@@ -35,8 +35,12 @@ class WorkoutForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    exercise = "pushups"
     username = StringField('Username:', validators=[DataRequired()])
     password = PasswordField('Password:', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+class UpdateRepsForm(FlaskForm):
+
+    deleteWorkout = BooleanField('Delete this workout')
+    submit = SubmitField('Delete workout(s)')

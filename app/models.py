@@ -54,8 +54,9 @@ class Exercises(db.Model):
 
 
 class ExercisesInWorkout(db.Model):
-    workoutid = db.Column(db.Integer, db.ForeignKey('workout.workoutid'), nullable=False, primary_key=True)
-    exerciseid = db.Column(db.Integer, db.ForeignKey('exercises.exerciseid'), nullable=False, primary_key=True)
+    logid = db.Column(db.Integer, primary_key =True)
+    workoutid = db.Column(db.Integer, db.ForeignKey('workout.workoutid'), nullable=False)
+    exerciseid = db.Column(db.Integer, db.ForeignKey('exercises.exerciseid'), nullable=False)
     reps_completed = db.Column(db.Integer, nullable=False, default =0)
     userWorkout = db.relationship("Workout", backref=db.backref("userworkout", lazy = 'dynamic'))
     userExercise = db.relationship("Exercises", backref=db.backref("userexercise", lazy = 'dynamic'))

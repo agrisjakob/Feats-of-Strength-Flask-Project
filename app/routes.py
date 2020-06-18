@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, request
 from app import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
 from app.models import Users, Workout, Exercises, ExercisesInWorkout
-from app.forms import RegistrationForm, LoginForm, WorkoutForm
+from app.forms import RegistrationForm, LoginForm, WorkoutForm, UpdateRepsForm
 from datetime import datetime
 
 def add_exercises():
@@ -87,6 +87,7 @@ def workout():
     currentWorkout = Workout.query.filter_by(userid= current_user.userid).order_by(Workout.workoutid.desc()).first()
     
     if not currentWorkout:
+        print("added brand new workout")
         Workout.create(Workout)
         add_exercises()
         return redirect(url_for('workout'))
@@ -94,6 +95,7 @@ def workout():
     lastFinishedExercise = ExercisesInWorkout.query.filter_by(workoutid = currentWorkout.workoutid).order_by(ExercisesInWorkout.workoutid.desc()).first().reps_completed 
     
     if lastFinishedExercise > 0:
+        print("added next workout")
         Workout.create(Workout)
         add_exercises()
         return redirect(url_for('workout'))
@@ -172,8 +174,25 @@ def workout():
                 else:
                     exercise.reps_completed = set3
         db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('log'))
 
 
-    return render_template('workout.html', title= 'Workout', posts=userLevel, form=form, exercise1=exercise1, exercise2=exercise2, exercise3=exercise3)
+    return render_template('workout.html', title= 'Workout', form=form, exercise1=exercise1, exercise2=exercise2, exercise3=exercise3)
+
+@app.route('/log', methods=['GET','POST'])
+@login_required
+def log():
+    exerciseTable = Exercises.query.all()
+    userWorkoutid =Workout.query.filter_by(userid= current_user.userid).order_by(Workout.workoutid.desc()).first()
+    workouts = ExercisesInWorkout.query.filter_by(workoutid = userWorkoutid.workoutid).all()
+    form = UpdateRepsForm()
+    if form.validate_on_submit():
+        if form.deleteWorkout:
+            for workout in workouts:
+                db.session.delete(workout)
+            db.session.delete(userWorkoutid)
+            db.session.commit()
+            return redirect(url_for('workout'))
+
+    return render_template('log.html', title= "Workout Log", exercises= exerciseTable, workout1=workouts, form=form) 
 
