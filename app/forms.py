@@ -1,6 +1,6 @@
   
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField, DateField, IntegerField
+from wtforms import StringField, SubmitField, SelectField, PasswordField, BooleanField, DateField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from app.models import Users, Workout, Exercises, ExercisesInWorkout
 from flask_login import login_user, current_user, logout_user
@@ -41,6 +41,5 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 class UpdateRepsForm(FlaskForm):
-
-    deleteWorkout = BooleanField('Delete this workout')
-    submit = SubmitField('Delete workout(s)')
+    deleteWorkout= BooleanField('Delete latest workout')
+    submit = SubmitField('Submit')

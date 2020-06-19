@@ -1,20 +1,25 @@
 {% extends "layout.html" %}
 {% block body_content %}
-<h3>This page displays  your latest three workouts, alongside the highest number of reps you completed for each exercise </h3>       
+<h3>This page displays  your latest workouts, alongside the highest number of reps you completed for each exercise </h3>       
 <form method = 'POST' action=''>
 {{ form.hidden_tag() }}
-
+        {{ form.deleteWorkout.label }}
+        {{ form.deleteWorkout }}
+        {{ form.submit }}
+	<a href="/update/{{ wid }}">Update Latest Workout</a>
+	<br>
+	<br>
 	{% for workout in workout1 %}
-       Exercise:
+	{% for w in workout %}
+	Exercise:
        {% for exercise in exercises %}
-       {% if workout.exerciseid == exercise.exerciseid %}
+       {% if w.exerciseid == exercise.exerciseid %}
        {{ exercise.exercise }} |
        {% endif %}
         {% endfor %}
-        Reps completed: {{ workout.reps_completed }}<br>
+        Reps completed: {{ w.reps_completed }}<br>
         {% endfor %}
-	{{ form.deleteWorkout.label }}
-	{{ form.deleteWorkout }}
-	{{ form.submit }}
+	<br>
+       {% endfor %}
 
 {% endblock %}

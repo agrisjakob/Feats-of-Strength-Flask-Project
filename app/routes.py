@@ -182,17 +182,107 @@ def workout():
 @app.route('/log', methods=['GET','POST'])
 @login_required
 def log():
+    workoutlist = []
     exerciseTable = Exercises.query.all()
-    userWorkoutid =Workout.query.filter_by(userid= current_user.userid).order_by(Workout.workoutid.desc()).first()
-    workouts = ExercisesInWorkout.query.filter_by(workoutid = userWorkoutid.workoutid).all()
+    userWorkoutid =Workout.query.filter_by(userid= current_user.userid).order_by(Workout.workoutid.desc()).all()
+    newestWorkoutid = Workout.query.filter_by(userid= current_user.userid).order_by(Workout.workoutid.desc()).first()
+    if not newestWorkoutid:
+        return redirect(url_for('workout'))
+    for wid in userWorkoutid:
+        workouts = ExercisesInWorkout.query.filter_by(workoutid = wid.workoutid).all()
+        workoutlist.append(workouts)
+    print(workoutlist)
     form = UpdateRepsForm()
     if form.validate_on_submit():
         if form.deleteWorkout:
-            for workout in workouts:
-                db.session.delete(workout)
-            db.session.delete(userWorkoutid)
-            db.session.commit()
-            return redirect(url_for('workout'))
+                newestWorkout= ExercisesInWorkout.query.filter_by(workoutid = newestWorkoutid.workoutid).all()
+                for exercise in newestWorkout:
+                    db.session.delete(exercise)
+        db.session.delete(newestWorkoutid)
+        db.session.commit()
+        return redirect(url_for('log'))
 
-    return render_template('log.html', title= "Workout Log", exercises= exerciseTable, workout1=workouts, form=form) 
+    return render_template('log.html', title= "Workout Log", exercises= exerciseTable, wid=newestWorkoutid.workoutid, workout1=workoutlist, form=form) 
 
+
+@app.route('/update/<int:wid>', methods=['GET','POST'])
+@login_required
+def update(wid):
+    getExercises = ExercisesInWorkout.query.filter_by(workoutid = wid).all()
+    index =1
+    for exercise in getExercises:
+        if len(getExercises) == 3:
+            if index == 1:
+                exercise1 = exercise.exerciseid
+                index += 1
+                continue
+            elif index ==2:
+                exercise2 = exercise.exerciseid
+                index +=1
+                continue
+            elif index ==3:
+                exercise3 = exercise.exerciseid
+                break
+        elif len(getExercises) == 2:
+            if index == 1:
+                exercise1 = exercise.exerciseid
+                index += 1
+                continue
+            elif index ==2:
+                exercise2 = exercise.exerciseid
+                exercise3 = exercise.exerciseid
+                break
+        elif len(getExercises) == 1:
+                exercise1 = exercise.exerciseid
+                exercise2 = exercise.exerciseid
+                exercise3 = exercise.exerciseid
+    
+    exercise1 = Exercises.query.filter_by(exerciseid = exercise1).first().exercise
+    exercise2 = Exercises.query.filter_by(exerciseid = exercise2).first().exercise
+    exercise3 = Exercises.query.filter_by(exerciseid = exercise3).first().exercise
+
+
+
+    form = WorkoutForm()
+    if form.validate_on_submit():
+        set1 = form.set1.data
+        set2 = form.set2.data
+        set3 = form.set3.data
+        index = 1
+        for exercise in getExercises:
+            if len(getExercises) == 3:
+                if index == 1:
+                    exercise.reps_completed = set1
+                    index +=1
+                    continue
+                elif index == 2:
+                    exercise.reps_completed = set2
+                    index += 1
+                    continue
+                elif index == 3:
+                    exercise.reps_completed = set3
+                    break
+            elif len(getExercises) == 2:
+                if index == 1:
+                    exercise.reps_completed = set1
+                    index += 1
+                    continue
+                elif index == 2:
+                    if set2 > set3:
+                        exercise.reps_completed = set2
+                        break
+                    else:
+                        exercise.reps_completed = set3
+                        break
+            elif len(getExercises) == 1:
+                if set1 >set2 and set1 > set3:
+                    exercise.reps_completed = set1
+                elif set2 > set1 and set2 > set3:
+                    exercise.reps_completed = set2
+                else:
+                    exercise.reps_completed = set3
+        db.session.commit()
+        return redirect(url_for('log'))
+
+
+    return render_template('workout.html', title= 'Workout', form=form, exercise1=exercise1, exercise2=exercise2, exercise3=exercise3)
