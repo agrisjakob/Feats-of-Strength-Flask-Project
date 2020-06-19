@@ -87,7 +87,6 @@ def workout():
     currentWorkout = Workout.query.filter_by(userid= current_user.userid).order_by(Workout.workoutid.desc()).first()
     
     if not currentWorkout:
-        print("added brand new workout")
         Workout.create(Workout)
         add_exercises()
         return redirect(url_for('workout'))
@@ -95,7 +94,6 @@ def workout():
     lastFinishedExercise = ExercisesInWorkout.query.filter_by(workoutid = currentWorkout.workoutid).order_by(ExercisesInWorkout.workoutid.desc()).first().reps_completed 
     
     if lastFinishedExercise > 0:
-        print("added next workout")
         Workout.create(Workout)
         add_exercises()
         return redirect(url_for('workout'))
@@ -191,7 +189,6 @@ def log():
     for wid in userWorkoutid:
         workouts = ExercisesInWorkout.query.filter_by(workoutid = wid.workoutid).all()
         workoutlist.append(workouts)
-    print(workoutlist)
     form = UpdateRepsForm()
     if form.validate_on_submit():
         if form.deleteWorkout:
