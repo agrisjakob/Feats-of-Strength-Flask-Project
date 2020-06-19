@@ -13,7 +13,7 @@ class Users(db.Model, UserMixin):
     password = db.Column(db.String(500), nullable=False)
     dob = db.Column(db.DateTime, nullable=False, default= datetime.utcnow)
     regDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    level = db.Column(db.Integer, nullable=False) 
+    level = db.Column(db.Integer, nullable=False, default= 1) 
     
     workouts = db.relationship('Workout', backref='user', lazy =True)
 

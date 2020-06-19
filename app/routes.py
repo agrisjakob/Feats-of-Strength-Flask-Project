@@ -282,4 +282,4 @@ def update(wid):
         return redirect(url_for('log'))
 
 
-    return render_template('workout.html', title= 'Workout', form=form, exercise1=exercise1, exercise2=exercise2, exercise3=exercise3)
+    return render_template('workout.html', title= 'Update', form=form, exercise1=exercise1, exercise2=exercise2, exercise3=exercise3)
