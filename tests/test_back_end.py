@@ -176,5 +176,3 @@ class TestRedirects(TestBase):
                 )
             self.assertRedirects(response, "/login")
 
-   
-

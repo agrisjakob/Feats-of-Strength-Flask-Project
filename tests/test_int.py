@@ -9,12 +9,17 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from app import app, db, bcrypt
 from app.models import Users, Exercises, ExercisesInWorkout, Workout
+from app.routes import add_exercises
+testUser = 'test'
+testPass = 'test'
+testLevel = 90
 
 class TestBase(LiveServerTestCase):
 
     def create_app(self):
-        app.config.update(SQLALCHEMY_DATABASE_URI=getenv('TEST_URI'),
-                SECRET_KEY=getenv('TEST_KEY'),
+        config_name = 'testing'
+        app.config.update(SQLALCHEMY_DATABASE_URI=getenv('TESTING_URI'),
+                SECRET_KEY=getenv('TESTING_KEY'),
                 WTF_CSRF_ENABLED=False,
                 DEBUG=True)
         return app
@@ -47,15 +52,56 @@ class TestRegistration(TestBase):
         self.driver.find_element_by_xpath("/html/body/a[4]").click()
         time.sleep(1)
 
-        self.driver.find_element_by_xpath('//*[@id="username"]').send_keys("selenium1")
-        self.driver.find_element_by_xpath('//*[@id="password"]').send_keys("test")
+        self.driver.find_element_by_xpath('//*[@id="username"]').send_keys(testUser)
+        self.driver.find_element_by_xpath('//*[@id="password"]').send_keys(testPass)
         self.driver.find_element_by_xpath('//*[@id="confirm_password"]').send_keys(
         "test")
-        self.driver.find_element_by_xpath('//*[@id="level"]').send_keys("90")
+        self.driver.find_element_by_xpath('//*[@id="level"]').send_keys(testLevel)
         self.driver.find_element_by_xpath('//*[@id="submit"]').click()
         time.sleep(1)
 
         assert url_for('login') in self.driver.current_url
+        assert Users.query.filter_by(userid=1).first().username == testUser
 
-        if __name__ == '__main__':
+    
+    def test_updating_workout_reps(self):
+        self.driver.find_element_by_xpath("/html/body/a[4]").click()
+        time.sleep(1)
+
+        self.driver.find_element_by_xpath('//*[@id="username"]').send_keys(testUser)
+        self.driver.find_element_by_xpath('//*[@id="password"]').send_keys(testPass)
+        self.driver.find_element_by_xpath('//*[@id="confirm_password"]').send_keys(testPass)
+        self.driver.find_element_by_xpath('//*[@id="level"]').send_keys(testLevel)
+        self.driver.find_element_by_xpath('//*[@id="submit"]').click()
+        time.sleep(1)
+        
+
+        self.driver.find_element_by_xpath('//*[@id="username"]').send_keys(testUser)
+        self.driver.find_element_by_xpath('//*[@id="password"]').send_keys(testPass)
+        self.driver.find_element_by_xpath('//*[@id="remember"]').click()
+        self.driver.find_element_by_xpath('//*[@id="submit"]').click()
+        time.sleep(2)
+        self.driver.get('http://34.105.237.213:5000/workout')
+        
+        time.sleep(2)
+        self.driver.get('http://34.105.237.213:5000/workout')
+        time.sleep(2)
+        self.driver.find_element_by_xpath('/html/body/a[2]').click()
+        self.driver.find_element_by_xpath('//*[@id="set1"]').send_keys(1)
+        self.driver.find_element_by_xpath('//*[@id="set2"]').send_keys(2)
+        self.driver.find_element_by_xpath('//*[@id="set3"]').send_keys(3)
+        self.driver.find_element_by_xpath('//*[@id="submit"]').click()
+        time.sleep(2)
+        assert ExercisesInWorkout.query.filter_by(workoutid=1).first().reps_completed(1)    
+            
+
+    
+    
+    
+    
+    
+    if __name__ == '__main__':
             unittest.main(port=5000)
+
+
+
