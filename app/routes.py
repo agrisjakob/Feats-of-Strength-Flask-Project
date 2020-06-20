@@ -1,4 +1,3 @@
-
 from flask import render_template, redirect, url_for, request
 from app import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
@@ -89,7 +88,7 @@ def workout():
     if not currentWorkout:
         Workout.create(Workout)
         add_exercises()
-        return redirect(url_for('workout'))
+        return '/workout'
     
     lastFinishedExercise = ExercisesInWorkout.query.filter_by(workoutid = currentWorkout.workoutid).order_by(ExercisesInWorkout.workoutid.desc()).first().reps_completed 
     
@@ -282,4 +281,4 @@ def update(wid):
         return redirect(url_for('log'))
 
 
-    return render_template('workout.html', title= 'Update', form=form, exercise1=exercise1, exercise2=exercise2, exercise3=exercise3)
+    return render_template('workout.html', title= 'Workout', form=form, exercise1=exercise1, exercise2=exercise2, exercise3=exercise3)

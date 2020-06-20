@@ -24,11 +24,27 @@ class TestBase(TestCase):
 
 
         hashed_pw2 = bcrypt.generate_password_hash('test')
-        employee = Users(username="test", password= hashed_pw2, level=3)
-        db.session.add(employee)
-        employeeWorkout = Workout(userid=1)
-        db.session.add(employeeWorkout)
-        
+        user1 = Users(username="test", password= hashed_pw2, level=3)
+        db.session.add(user1)
+        user1Workout = Workout(userid=1)
+        db.session.add(user1Workout)
+        db.session.commit()
+
+
+        hashed_pw2 = bcrypt.generate_password_hash('test')
+        user2 = Users(username="test2", password= hashed_pw2, level=2)
+        db.session.add(user2)
+        user2Workout = Workout(userid=2)
+        db.session.add(user2Workout)
+        db.session.commit()
+
+        hashed_pw2 = bcrypt.generate_password_hash('test')
+        user3 = Users(username="test3", password= hashed_pw2, level=1)
+        db.session.add(user3)
+        user3Workout = Workout(userid=3)
+        db.session.add(user3Workout)
+        db.session.commit()
+
         exercise1 = Exercises(exercise="Wall push-ups")
         exercise2 = Exercises(exercise="Bent-knee push-ups")
         exercise3 = Exercises(exercise="Push-ups")
@@ -55,6 +71,18 @@ class TestBase(TestCase):
         db.session.add(ex2)
         db.session.add(ex3)
         db.session.commit()
+    
+        
+        ex1 = ExercisesInWorkout(exerciseid =1, workoutid=2)
+        ex2 = ExercisesInWorkout(exerciseid =2, workoutid=2)
+        db.session.add(ex1)
+        db.session.add(ex2)
+        db.session.commit()
+
+        ex1 = ExercisesInWorkout(exerciseid =1, workoutid=3)
+        db.session.add(ex1)
+        db.session.commit()
+
     def tearDown(self):
         db.session.remove()
         db.drop_all()
@@ -104,6 +132,14 @@ class TestViews(TestBase):
             response= self.client.get('/log')
             self.assertEqual(response.status_code, 200)
 
+    def test_update_view(self):
+        with self.client:
+            self.client.post('/login',
+                    data=dict(
+                        username ="test",
+                        password ="test"), follow_redirects=True)
+            response= self.client.get('/update/1')
+            self.assertEqual(response.status_code, 200)
 
 class TestFunctionality(TestBase):
 
@@ -116,8 +152,7 @@ class TestFunctionality(TestBase):
                         password ="test"))
             self.assertRedirects(response, '/workout')
     
-    def test_logging_workout(self):
-
+    def test_logging_workout_level_3_user(self):
 
         with self.client:
             self.client.post('/login',
@@ -131,9 +166,79 @@ class TestFunctionality(TestBase):
                         set3=9090), follow_redirects=True
                     )
             self.assertIn(b'9123', response.data)
+    
+    
+    def test_logging_workout_level_2_user(self):
+
+        with self.client:
+            self.client.post('/login',
+                    data=dict(
+                        username ="test2",
+                        password ="test"), follow_redirects=True)
+            response = self.client.post('/workout',
+                    data=dict(
+                        set1=9123,
+                        set2=9018,
+                        set3=9090), follow_redirects=True
+                    )
+            self.assertIn(b'9123', response.data)
+
+
+    def test_logging_workout_level_1_user(self):
+
+        with self.client:
+            self.client.post('/login',
+                    data=dict(
+                        username ="test3",
+                        password ="test"), follow_redirects=True)
+            response = self.client.post('/workout',
+                    data=dict(
+                        set1=9123,
+                        set2=9018,
+                        set3=9090), follow_redirects=True
+                    )
+            self.assertIn(b'9123', response.data)
+
+
+    def test_updating_previous_workout_level_3_user(self):
+            self.client.post('/login',
+                    data=dict(
+                        username ="test",
+                        password ="test"), follow_redirects=True)
+            response= self.client.post('/update/1',
+                    data=dict(
+                        set1 = 1,
+                        set2 = 2,
+                        set3 = 3))
+            self.assertRedirects(response, '/log')
+    
+    def test_updating_previous_workout_level_2_user(self):
+            self.client.post('/login',
+                    data=dict(
+                        username ="test2",
+                        password ="test"), follow_redirects=True)
+            response= self.client.post('/update/2',
+                    data=dict(
+                        set1 = 1,
+                        set2 = 2,
+                        set3 = 3))
+            self.assertRedirects(response, '/log')
+
+    def test_updating_previous_workout_level_1_user(self):
+            self.client.post('/login',
+                    data=dict(
+                        username ="test3",
+                        password ="test"), follow_redirects=True)
+            response= self.client.post('/update/3',
+                    data=dict(
+                        set1 = 1,
+                        set2 = 2,
+                        set3 = 3))
+            self.assertRedirects(response, '/log')
 
 
 class TestRedirects(TestBase):
+    
     def test_redirect_to_workoutlog_when_submit_workout(self):
             self.client.post('/login',
                     data=dict(
@@ -145,6 +250,7 @@ class TestRedirects(TestBase):
                         set2=2,
                         set3=3))
             self.assertRedirects(response, '/log')
+    
     def test_login_redirect_when_workouts(self):
         with self.client:
             response = self.client.get('workout')
@@ -169,9 +275,9 @@ class TestRedirects(TestBase):
         with self.client:
             response = self.client.post('/register',
                 data=dict(
-                    username="test2",
-                    password="test2",
-                    confirm_password="test2",
+                    username="tester",
+                    password="tester",
+                    confirm_password="tester",
                     level= 90)
                 )
             self.assertRedirects(response, "/login")
