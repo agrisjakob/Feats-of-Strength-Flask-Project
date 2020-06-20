@@ -55,7 +55,9 @@ class TestBase(TestCase):
         db.session.add(ex2)
         db.session.add(ex3)
         db.session.commit()
-
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
 
 class TestViews(TestBase):
 
@@ -75,18 +77,44 @@ class TestViews(TestBase):
         response = self.client.get(url_for('login'))
         self.assertEqual(response.status_code,200)
 
+    def test_workout_view(self):
+        with self.client:
+            self.client.post('/login',
+                    data=dict(
+                    username ="test",
+                    password ="test"))
+            response = self.client.get('/workout')
+            self.assertEqual(response.status_code, 200)
+
+    def test_logout_view(self):
+        with self.client:
+            self.client.post('/login',
+                    data=dict(
+                    username ="test",
+                    password ="test"), follow_redirects = True)
+            response = self.client.get(url_for('logout'))
+            self.assertRedirects(response, '/login')
+            
+    def test_log_view(self):
+        with self.client:    
+            self.client.post('/login',
+                    data=dict(
+                        username ="test",
+                        password ="test"), follow_redirects=True)
+            response= self.client.get('/log')
+            self.assertEqual(response.status_code, 200)
+
 
 class TestFunctionality(TestBase):
 
     def test_login(self):
 
         with self.client:
-            self.client.post('/login',
+            response= self.client.post('/login',
                     data=dict(
                         username ="test",
                         password ="test"))
-            response = self.client.get('/workout')
-            self.assertIn(b'Workout Page', response.data)
+            self.assertRedirects(response, '/workout')
     
     def test_logging_workout(self):
 
@@ -106,11 +134,36 @@ class TestFunctionality(TestBase):
 
 
 class TestRedirects(TestBase):
-
+    def test_redirect_to_workoutlog_when_submit_workout(self):
+            self.client.post('/login',
+                    data=dict(
+                        username ="test",
+                        password ="test"), follow_redirects=True)
+            response = self.client.post('/workout',
+                    data=dict(
+                        set1=1,
+                        set2=2,
+                        set3=3))
+            self.assertRedirects(response, '/log')
     def test_login_redirect_when_workouts(self):
         with self.client:
             response = self.client.get('workout')
             self.assertRedirects(response, "/login?next=%2Fworkout")
+
+    def test_redirect_to_login_when_view_log_if_not_logged_in(self):
+        with self.client:
+            response = self.client.get('/log')
+            self.assertRedirects(response, "/login?next=%2Flog")
+    def test_redirect_to_workout_when_already_logged_in(self):
+        with self.client:
+                    self.client.post('/login',
+                    data=dict(
+                    username ="test",
+                    password ="test"))
+                    response = self.client.get('/login')
+                    self.assertRedirects(response, '/workout')
+                    
+
 
     def test_redirect_to_login_after_registering(self):
         with self.client:
@@ -122,4 +175,6 @@ class TestRedirects(TestBase):
                     level= 90)
                 )
             self.assertRedirects(response, "/login")
+
+   
 
