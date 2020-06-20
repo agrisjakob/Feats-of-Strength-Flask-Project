@@ -22,13 +22,13 @@ class TestBase(TestCase):
         db.drop_all()
         db.create_all()
 
-        hashed_pw = bcrypt.generate_password_hash('admin')
-        admin = Users(username="admin",  password=hashed_pw, level=3)
 
         hashed_pw2 = bcrypt.generate_password_hash('test')
-        employee = Users(username="test", password= hashed_pw2, level=2)
-        db.session.add(admin)
+        employee = Users(username="test", password= hashed_pw2, level=3)
         db.session.add(employee)
+        employeeWorkout = Workout(userid=1)
+        db.session.add(employeeWorkout)
+        
         exercise1 = Exercises(exercise="Wall push-ups")
         exercise2 = Exercises(exercise="Bent-knee push-ups")
         exercise3 = Exercises(exercise="Push-ups")
@@ -44,8 +44,18 @@ class TestBase(TestCase):
         db.session.add(exercise5)
         db.session.add(exercise6)
         db.session.add(exercise7)
+
+
         
+        ex1 = ExercisesInWorkout(exerciseid =1, workoutid=1)
+        ex2 = ExercisesInWorkout(exerciseid =2, workoutid=1)
+        ex3 = ExercisesInWorkout(exerciseid=3, workoutid=1)
+
+        db.session.add(ex1)
+        db.session.add(ex2)
+        db.session.add(ex3)
         db.session.commit()
+
 
 class TestViews(TestBase):
 
@@ -66,24 +76,33 @@ class TestViews(TestBase):
         self.assertEqual(response.status_code,200)
 
 
-class TestWorkouts(TestBase):
+class TestFunctionality(TestBase):
 
-    def test_complete_workout(self):
+    def test_login(self):
 
         with self.client:
             self.client.post('/login',
                     data=dict(
                         username ="test",
-                        password ="test"),
-                    )
+                        password ="test"))
+            response = self.client.get('/workout')
+            self.assertIn(b'Workout Page', response.data)
+    
+    def test_logging_workout(self):
+
+
+        with self.client:
+            self.client.post('/login',
+                    data=dict(
+                        username ="test",
+                        password ="test"), follow_redirects=True)
             response = self.client.post('/workout',
                     data=dict(
-                        set1= "1",
-                        set2= "3",
-                        set3="9371"),
-                    follow_redirects=True
+                        set1=9123,
+                        set2=9018,
+                        set3=9090), follow_redirects=True
                     )
-            self.assertIn(b'This page displays your latest workouts', response.data)
+            self.assertIn(b'9123', response.data)
 
 
 class TestRedirects(TestBase):
@@ -92,3 +111,15 @@ class TestRedirects(TestBase):
         with self.client:
             response = self.client.get('workout')
             self.assertRedirects(response, "/login?next=%2Fworkout")
+
+    def test_redirect_to_login_after_registering(self):
+        with self.client:
+            response = self.client.post('/register',
+                data=dict(
+                    username="test2",
+                    password="test2",
+                    confirm_password="test2",
+                    level= 90)
+                )
+            self.assertRedirects(response, "/login")
+
