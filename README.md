@@ -69,6 +69,9 @@ This version of the ERD got rid of unnecessary columns and assigned the Exercise
 #### ERD Functionality
 The app models a many-to-many relationship between Workouts and Exercises using an association table. This allows for the generation of custom workouts, using a list of exercises found in the exercise table that are matched to a workout ID and each workout ID is assigned to one user.
 
+## Continuous Integration
+The web app uses Jenkins, as its CI server. Changes made to the master branch of this repository are automatically detected (using webhooks), triggering automated testing, which (if successful) triggers the restart of the application.
+
 ## Project Tracking
 Project management was conducted using a Trello (kanban) board, with a MOSCOW system indicating the importance of each task. The board can be accessed [here](https://trello.com/b/RqNvjEBM/feats-of-strength)
 
@@ -84,7 +87,7 @@ After completion of the project, minor corrections and a reflection upon the ini
 ![Reflection](https://i.imgur.com/cPkhfnz.png)
 
 ## Testing
-The app comes with unit and integration tests, covering the main functions of the app. To run the tests, simply run pytest in the root of the application:
+The app comes with unit and integration tests, covering the main functions of the app. To run the tests on your copy, simply run pytest in the root of the application:
 
 ```bash
 pytest
