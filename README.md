@@ -21,6 +21,7 @@ Please find below the progression of the app's entity relationship diagram from 
 ![Initial Idea](https://i.imgur.com/4WzIJQX.png)
 
 #### ERD Progression (implementing a many-to-many relationship)
+The initial ERD design was not fit for the intended many-to-many relationship between the workout and exercises tables. Whereas, this design solves those issues. 
 ![ERD Progression](https://i.imgur.com/LFmVKUl.png)
 
 #### Final ERD (currently implemented)
