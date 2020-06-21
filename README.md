@@ -94,3 +94,7 @@ The app comes with unit tests (pytest) and integration tests (selenium), coverin
 pytest
 ```
 The tests cover registration, login, workout generation, workout deletion and workout update functionalities.
+
+## Improvements
+
+
