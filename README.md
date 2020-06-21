@@ -95,6 +95,13 @@ pytest
 ```
 The tests cover registration, login, workout generation, workout deletion and workout update functionalities.
 
-## Improvements
+## Potential Improvements
+### Delete/update any workout functionality
+Some work needs to be done so that a user can edit and/or delete any workout that they have completed from the log, without having to delete the previous workouts.
 
+### User level-up system
+User levels should increase once they've managed to do a certain numbers of reps on their hardest exercise. This can be implemented via matching the reps completed in a user's latest workout to the threshold column in the exercise table. Once a threshold is reached, the user's level increases by one. This would result in the user's next workout having harder exercises.
+
+### Injury prevention page
+The app needs an injury prevention page, which provides information for preventing, identifying and dealing with injuries.
 
