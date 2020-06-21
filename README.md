@@ -93,7 +93,10 @@ The app comes with unit tests (pytest) and integration tests (selenium), coverin
 ```bash
 pytest
 ```
-The tests cover registration, login, workout generation, workout deletion and workout update functionalities.
+The tests cover registration, login, workout generation, workout deletion and workout update functionalities:
+![coverage](https://i.imgur.com/qSfEUmT.png)
+
+Alternatively, the test coverage can be viewed [here](http://35.242.145.187:5000/coverage)
 
 ## Potential Improvements
 ### Delete/update any workout functionality
