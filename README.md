@@ -17,6 +17,7 @@ pip install -r requirements.txt
 ## Functionality
 ### Registration
 You need to have a user account to use the app. The app uses a standard registration form with a username and password. The "How many pushups can you do?" question is used to determine the user's fitness level, which is then used to generate a workout that's appropriate to the user's current ability.
+
 ![Register](https://i.imgur.com/J2SBGok.png)
 
 ### Login
