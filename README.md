@@ -39,13 +39,12 @@ The exercise table contains a list of exercises that get progressively harder, t
 ### Workout log
 This section contains all of the user's previously completed workouts (and their most recently generated unfinished workout).
 The user has the option to either delete their latest workout by ticking the "Delete latest workout" box and pressing "Submit" or updating their most recent workout. 
-
 ![Log page](https://i.imgur.com/mOBWkp0.png)
 Clicking on the "Update Latest Workout" link will redirect the user to a dynamic URL, set by the user's most recent workout id, within which the user can enter the corrected number of reps for their latest workout.
-#### Drawbacks
-Note there are some drawbacks. Firstly, a user must delete their unfinished workout (if present) before attempting to edit their finished workouts. Secondly, a user can only edit their latest workout, meaning that they have to delete other workouts to get to a workout lower down on the page.
 
 ![Update page](https://i.imgur.com/95XS2yY.png)
+#### Drawbacks
+Note there are some drawbacks. Firstly, a user must delete their unfinished workout (if present) before attempting to edit their finished workouts. Secondly, a user can only edit their latest workout, meaning that they have to delete other workouts to get to a workout lower down on the page.
 
 ### Logout
 Users can log out of their accounts by pressing the 'Logout' button, which is always located at the top right corner of the page.
