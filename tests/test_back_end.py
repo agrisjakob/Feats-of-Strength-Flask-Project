@@ -201,6 +201,7 @@ class TestFunctionality(TestBase):
 
 
     def test_updating_previous_workout_level_3_user(self):
+        with self.client:
             self.client.post('/login',
                     data=dict(
                         username ="test",
@@ -213,6 +214,7 @@ class TestFunctionality(TestBase):
             self.assertRedirects(response, '/log')
     
     def test_updating_previous_workout_level_2_user(self):
+        with self.client:
             self.client.post('/login',
                     data=dict(
                         username ="test2",
@@ -225,6 +227,7 @@ class TestFunctionality(TestBase):
             self.assertRedirects(response, '/log')
 
     def test_updating_previous_workout_level_1_user(self):
+        with self.client:
             self.client.post('/login',
                     data=dict(
                         username ="test3",
@@ -235,8 +238,50 @@ class TestFunctionality(TestBase):
                         set2 = 2,
                         set3 = 3))
             self.assertRedirects(response, '/log')
+    
+    def test_workout_generation_level_3_user(self):
+        with self.client:
+            self.client.post('/login',
+                data=dict(
+                username ="test",
+                password ="test"))
+            usersWorkout= ExercisesInWorkout.query.filter_by(workoutid=1).all()
+            usersWorkoutid = Workout.query.filter_by(workoutid=1).first()
 
+            for exercise in usersWorkout:
+                db.session.delete(exercise)
+            db.session.delete(usersWorkoutid)
+            response= self.client.get('/workout')
+            self.assertRedirects(response, '/workout')
 
+    def test_workout_generation_level_2_user(self):
+        with self.client:
+            self.client.post('/login',
+                data=dict(
+                username ="test2",
+                password ="test"))
+            usersWorkout= ExercisesInWorkout.query.filter_by(workoutid=2).all()
+            usersWorkoutid = Workout.query.filter_by(workoutid=2).first()
+
+            for exercise in usersWorkout:
+                db.session.delete(exercise)
+            db.session.delete(usersWorkoutid)
+            response= self.client.get('/workout')
+            self.assertRedirects(response, '/workout')
+
+    def test_workout_generation_level_1_user(self):
+        with self.client:
+            self.client.post('/login',
+                data=dict(
+                username ="test3",
+                password ="test"))
+            usersWorkout= ExercisesInWorkout.query.filter_by(workoutid=3).first()
+            usersWorkoutid = Workout.query.filter_by(workoutid=3).first()
+
+            db.session.delete(usersWorkout)
+            db.session.delete(usersWorkoutid)
+            response= self.client.get('/workout')
+            self.assertRedirects(response, '/workout')
 class TestRedirects(TestBase):
     
     def test_redirect_to_workoutlog_when_submit_workout(self):
