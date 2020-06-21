@@ -17,9 +17,14 @@ pip install -r requirements.txt
 ### Database Structure
 Please find below the progression of the app's entity relationship diagram from the conception of the idea through to implementation:
 
-
+#### Initial ERD Concept
 ![Initial Idea](https://i.imgur.com/4WzIJQX.png)
+
+#### ERD Progression (implementing a many-to-many relationship)
 ![ERD Progression](https://i.imgur.com/YJrtRkl.png)
+
+#### Final ERD (currently implemented)
+![Final ERD](https://i.imgur.com/yDwnLWV.png)
 
 
 ```python
