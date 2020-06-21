@@ -13,6 +13,8 @@ pip install -r requirements.txt
 [WebApp](http://http://35.242.145.187:5000/)
 [Trello Board](https://trello.com/b/RqNvjEBM/feats-of-strength)
 
+## Functionality
+
 ## Architecture
 ### Database Structure
 Please find below the progression of the app's entity relationship diagram from the conception of the idea through to implementation:
@@ -45,18 +47,10 @@ Before any project work began, an initial risk assessment was conducted to ident
 After completion of the project, minor corrections and a reflection upon the initial risk assessment were conducted:
 ![Reflection](https://i.imgur.com/cPkhfnz.png)
 
-```python
-import foobar
+## Testing
+The app comes with unit and integration tests, covering the main functions of the app. To run the tests, simply run pytest in the root of the application:
 
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
+```bash
+pytest
 ```
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
