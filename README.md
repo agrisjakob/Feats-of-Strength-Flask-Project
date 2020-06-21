@@ -105,3 +105,6 @@ User levels should increase once they've managed to do a certain numbers of reps
 ### Injury prevention page
 The app needs an injury prevention page, which provides information for preventing, identifying and dealing with injuries.
 
+### Home page content
+The home page could use some sort of hi-scores table or top 20 most recently finished workouts table, so that users can see others participating and progressing.
+
