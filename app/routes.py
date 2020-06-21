@@ -88,7 +88,7 @@ def workout():
     if not currentWorkout:
         Workout.create(Workout)
         add_exercises()
-        return '/workout'
+        return redirect(url_for('workout'))
     
     lastFinishedExercise = ExercisesInWorkout.query.filter_by(workoutid = currentWorkout.workoutid).order_by(ExercisesInWorkout.workoutid.desc()).first().reps_completed 
     
