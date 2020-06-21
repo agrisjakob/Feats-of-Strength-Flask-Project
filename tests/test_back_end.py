@@ -88,6 +88,10 @@ class TestBase(TestCase):
         db.drop_all()
 
 class TestViews(TestBase):
+    
+    def test_coverage_view(self):
+        response = self.client.get(url_for('coverage'))
+        self.assertEqual(response.status_code, 200)
 
     def test_home_view(self):
         response = self.client.get(url_for('home'))

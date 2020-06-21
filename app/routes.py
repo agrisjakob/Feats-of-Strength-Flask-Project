@@ -78,6 +78,10 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.route('/coverage')
+def coverage():
+    return render_template('coverage.html')
+
 
 @app.route('/workout', methods=['GET','POST'])
 @login_required
