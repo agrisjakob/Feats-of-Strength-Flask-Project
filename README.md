@@ -28,6 +28,22 @@ The initial ERD design was not fit for the intended many-to-many relationship be
 This version of the ERD got rid of unnecessary columns and assigned the Exercises In Workouts table a PK, to get around errors during workout creation.
 ![Final ERD](https://i.imgur.com/EvltqW6.png)
 
+#### ERD Functionality
+The app models a many-to-many relationship between Workouts and Exercises using an association table. This allows for the generation of custom workouts, using a list of exercises found in the exercise table that are matched to a workout ID and each workout ID is assigned to one user.
+
+## Project Tracking
+Project management was conducted using a Trello (kanban) board, with a MOSCOW system indicating the importance of each task. The board can be accessed [here](https://trello.com/b/RqNvjEBM/feats-of-strength)
+
+## Risk Assessment
+The final document can be found [here](https://drive.google.com/file/d/1-GfLXsC_jvMjW4AnRw3JfweoX_0BB4g0/view?usp=sharing)
+
+### Initial Risk Assessment
+Before any project work began, an initial risk assessment was conducted to identify any risks and potential mitigation strategies:
+![Initial Risk Assessment](https://i.imgur.com/IPjqWBd.png)
+
+### Reflection
+After completion of the project, minor corrections and a reflection upon the initial risk assessment were conducted:
+![Reflection](https://i.imgur.com/cPkhfnz.png)
 
 ```python
 import foobar
