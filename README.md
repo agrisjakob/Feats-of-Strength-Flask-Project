@@ -87,7 +87,7 @@ After completion of the project, minor corrections and a reflection upon the ini
 ![Reflection](https://i.imgur.com/cPkhfnz.png)
 
 ## Testing
-The app comes with unit and integration tests, covering the main functions of the app. To run the tests on your copy, simply run pytest in the root of the application:
+The app comes with unit tests (pytest) and integration tests (selenium), covering the main functions of the app. To run the tests on your copy, simply run pytest in the root of the application:
 
 ```bash
 pytest
