@@ -15,6 +15,37 @@ pip install -r requirements.txt
 [Trello Board](https://trello.com/b/RqNvjEBM/feats-of-strength)
 
 ## Functionality
+### Registration
+You need to have a user account to use the app. The app uses a standard registration form with a username and password. The "How many pushups can you do?" question is used to determine the user's fitness level, which is then used to generate a workout that's appropriate to the user's current ability.
+![Register](https://i.imgur.com/J2SBGok.png)
+
+### Login
+The app uses a standard login form, with the option to keep the user logged in if "Remember me" is ticked.
+![Login](https://i.imgur.com/VnLvYg8.png)
+
+### Workouts
+This is the core page of the app, accessing it will automatically generate a user workout, if the user is new or if they have completed a previous workout. A workout consists of 3 sets with each set getting increasingly harder. A user's level (see registration) corresponds to an exercise in the database and determines the hardest type of exercise the user should do. This exercise is assigned as set 3, alongside two progressively easier exercises for set 1 and 2:
+![Example Workout1](https://i.imgur.com/95XS2yY.png)
+The user can then enter the number of reps they have completed for each set and submit the form to be redirected to their workout log.
+#### Exceptions
+If a user's level is below 3 their workouts will be generated differently:
+Level 2 - This user's workout will consist of their hardest exercise as set 3, and two sets of the same (easier) exercise for sets 1 and 2.
+Level 3 - This user's workout will consist of three sets of the same exercise, as they are not fit enough for the higher tier exercises.
+#### Exercise table structure
+The exercise table contains a list of exercises that get progressively harder, the higher their exercise id. This allows for an easy way to create skill-level tailored workouts.
+
+### Workout log
+This section contains all of the user's previously completed workouts (and their most recently generated unfinished workout).
+The user has the option to either delete their latest workout by ticking the "Delete latest workout" box and pressing "Submit" or updating their most recent workout. 
+![Log page](https://i.imgur.com/mOBWkp0.png)
+Clicking on the "Update Latest Workout" link will redirect the user to a dynamic URL, set by the user's most recent workout id, within which the user can enter the corrected number of reps for their latest workout.
+#### Drawbacks
+Note there are some drawbacks. Firstly, a user must delete their unfinished workout (if present) before attempting to edit their finished workouts. Secondly, a user can only edit their latest workout, meaning that they have to delete other workouts to get to a workout lower down on the page.
+![Update page](https://i.imgur.com/95XS2yY.png)
+
+### Logout
+Users can log out of their accounts by pressing the 'Logout' button, which is always located at the top right corner of the page.
+![Logout](https://i.imgur.com/cTkhWcR.png)
 
 ## Architecture
 ### Database Structure
