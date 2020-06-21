@@ -16,7 +16,10 @@ pip install -r requirements.txt
 ## Architecture
 ### Database Structure
 Please find below the progression of the app's entity relationship diagram from the conception of the idea through to implementation:
-![Initial Idea](https://i.imgur.com/YJrtRkl.png)
+
+
+![Initial Idea](https://i.imgur.com/4WzIJQX.png)
+![ERD Progression](https://i.imgur.com/YJrtRkl.png)
 
 
 ```python
