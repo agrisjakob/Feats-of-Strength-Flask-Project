@@ -92,4 +92,4 @@ The app comes with unit and integration tests, covering the main functions of th
 ```bash
 pytest
 ```
-
+The tests cover registration, login, workout generation, workout deletion and workout update functionalities.
