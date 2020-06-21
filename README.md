@@ -14,8 +14,10 @@ pip install -r requirements.txt
 [Trello Board](https://trello.com/b/RqNvjEBM/feats-of-strength)
 
 ## Architecture
-
 ### Database Structure
+Please find below the progression of the app's entity relationship diagram from the conception of the idea through to implementation:
+![Initial Idea](https://i.imgur.com/YJrtRkl.png)
+
 
 ```python
 import foobar
