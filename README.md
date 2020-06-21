@@ -11,7 +11,7 @@ pip install -r requirements.txt
 ```
 
 ## Resources
-[WebApp](http://http://35.242.145.187:5000/)
+[WebApp](https://http://35.242.145.187:5000/)
 
 [Trello Board](https://trello.com/b/RqNvjEBM/feats-of-strength)
 
