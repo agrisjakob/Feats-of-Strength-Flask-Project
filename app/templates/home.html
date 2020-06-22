@@ -1,4 +1,10 @@
 {% extends "layout.html" %}
+
 {% block body_content %}
+{% for review in reviews %}
+A user rated their workout as a {{ review.rating }}/10 on {{ review.reviewDate }}
+<br>
+{% endfor %}
+
 {% endblock %}
 

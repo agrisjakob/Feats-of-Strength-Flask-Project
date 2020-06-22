@@ -1,8 +1,8 @@
 from flask import render_template, redirect, url_for, request
 from app import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
-from app.models import Users, Workout, Exercises, ExercisesInWorkout
-from app.forms import RegistrationForm, LoginForm, WorkoutForm, UpdateRepsForm
+from app.models import Users, Workout, Exercises, ExercisesInWorkout, Reviews
+from app.forms import RegistrationForm, LoginForm, WorkoutForm, UpdateRepsForm, ReviewForm
 from datetime import datetime
 
 def add_exercises():
@@ -29,7 +29,8 @@ def add_exercises():
 @app.route('/')
 @app.route('/home/')
 def home():
-    return render_template('home.html', title= 'Home')
+    reviewData = Reviews.query.all()
+    return render_template('home.html', title= 'Home', reviews= reviewData)
 
 @app.route('/about')
 def about():
@@ -78,6 +79,10 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.route('/coverage')
+def coverage():
+    return render_template('coverage.html')
+
 
 @app.route('/workout', methods=['GET','POST'])
 @login_required
@@ -88,7 +93,7 @@ def workout():
     if not currentWorkout:
         Workout.create(Workout)
         add_exercises()
-        return '/workout'
+        return redirect(url_for('workout'))
     
     lastFinishedExercise = ExercisesInWorkout.query.filter_by(workoutid = currentWorkout.workoutid).order_by(ExercisesInWorkout.workoutid.desc()).first().reps_completed 
     
@@ -282,3 +287,20 @@ def update(wid):
 
 
     return render_template('workout.html', title= 'Workout', form=form, exercise1=exercise1, exercise2=exercise2, exercise3=exercise3)
+
+
+@app.route('/review/<int:wid>', methods=['GET','POST'])
+@login_required
+def review(wid):
+    form= ReviewForm()
+    workoutRated = Reviews.query.filter_by(workoutid = wid).first()
+    if workoutRated:
+            return "You've already rated this workout, please go back and create a new workout"
+    else:
+        if form.validate_on_submit():
+            print("validated")
+            currentRating = Reviews(workoutid=wid, rating= form.rating.data)
+            db.session.add(currentRating)
+            db.session.commit()
+            return redirect(url_for('home'))
+        return render_template('review.html', title= 'Review', form=form)

@@ -11,8 +11,8 @@ from os import getenv
 class TestBase(TestCase):
     def create_app(self):
         config_name = 'testing'
-        app.config.update(SQLALCHEMY_DATABASE_URI=getenv('TEST_URI'),
-                SECRET_KEY=getenv('TEST_KEY'),
+        app.config.update(SQLALCHEMY_DATABASE_URI=getenv('TESTING_URI'),
+                SECRET_KEY=getenv('TESTING_KEY'),
                 WTF_CSRF_ENABLED=False,
                 DEBUG=True)
         return app
@@ -88,6 +88,10 @@ class TestBase(TestCase):
         db.drop_all()
 
 class TestViews(TestBase):
+    
+    def test_coverage_view(self):
+        response = self.client.get(url_for('coverage'))
+        self.assertEqual(response.status_code, 200)
 
     def test_home_view(self):
         response = self.client.get(url_for('home'))
@@ -140,7 +144,14 @@ class TestViews(TestBase):
                         password ="test"), follow_redirects=True)
             response= self.client.get('/update/1')
             self.assertEqual(response.status_code, 200)
-
+    def test_ratings_view(self):
+        with self.client:
+            self.client.post('/login',
+                data=dict(
+                username ="test",
+                password ="test"), follow_redirects=True)
+            response= self.client.get('/review/1')
+            self.assertEqual(response.status_code, 200)
 class TestFunctionality(TestBase):
 
     def test_login(self):
@@ -201,6 +212,7 @@ class TestFunctionality(TestBase):
 
 
     def test_updating_previous_workout_level_3_user(self):
+        with self.client:
             self.client.post('/login',
                     data=dict(
                         username ="test",
@@ -213,6 +225,7 @@ class TestFunctionality(TestBase):
             self.assertRedirects(response, '/log')
     
     def test_updating_previous_workout_level_2_user(self):
+        with self.client:
             self.client.post('/login',
                     data=dict(
                         username ="test2",
@@ -225,6 +238,7 @@ class TestFunctionality(TestBase):
             self.assertRedirects(response, '/log')
 
     def test_updating_previous_workout_level_1_user(self):
+        with self.client:
             self.client.post('/login',
                     data=dict(
                         username ="test3",
@@ -235,7 +249,60 @@ class TestFunctionality(TestBase):
                         set2 = 2,
                         set3 = 3))
             self.assertRedirects(response, '/log')
+    
+    def test_workout_generation_level_3_user(self):
+        with self.client:
+            self.client.post('/login',
+                data=dict(
+                username ="test",
+                password ="test"))
+            usersWorkout= ExercisesInWorkout.query.filter_by(workoutid=1).all()
+            usersWorkoutid = Workout.query.filter_by(workoutid=1).first()
 
+            for exercise in usersWorkout:
+                db.session.delete(exercise)
+            db.session.delete(usersWorkoutid)
+            response= self.client.get('/workout')
+            self.assertRedirects(response, '/workout')
+
+    def test_workout_generation_level_2_user(self):
+        with self.client:
+            self.client.post('/login',
+                data=dict(
+                username ="test2",
+                password ="test"))
+            usersWorkout= ExercisesInWorkout.query.filter_by(workoutid=2).all()
+            usersWorkoutid = Workout.query.filter_by(workoutid=2).first()
+
+            for exercise in usersWorkout:
+                db.session.delete(exercise)
+            db.session.delete(usersWorkoutid)
+            response= self.client.get('/workout')
+            self.assertRedirects(response, '/workout')
+
+    def test_workout_generation_level_1_user(self):
+        with self.client:
+            self.client.post('/login',
+                data=dict(
+                username ="test3",
+                password ="test"))
+            usersWorkout= ExercisesInWorkout.query.filter_by(workoutid=3).first()
+            usersWorkoutid = Workout.query.filter_by(workoutid=3).first()
+
+            db.session.delete(usersWorkout)
+            db.session.delete(usersWorkoutid)
+            response= self.client.get('/workout')
+            self.assertRedirects(response, '/workout')
+
+    def test_adding_a_rating(self):
+        with self.client:
+            self.client.post('/login',
+                    data=dict(
+                        username ="test",
+                        password ="test"), follow_redirects=True)
+            response = self.client.post('/review/1', data=dict(
+                rating = 7))
+            self.assertRedirects(response, '/home/')
 
 class TestRedirects(TestBase):
     
