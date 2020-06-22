@@ -2,11 +2,10 @@
 
 FOS is a Python web application, constructed using the Flask web framework. It allows you to provide tailor-made workout plans for a specific feat of strength, such as one-handed pushups. Users must register before using the app in order to generate workout plans suited to each user's ability. Users can store, edit and delete these workouts. The app comes with pre-made unit and integration tests, that can be used as a trigger for a continuous integration pipeline.
 This app is ran on a Google Cloud Platform Ubuntu 18.04 virtual machine, using the Python-based HTTP web server Gunicorn.
-
-The database is hosted on a GCP MySQL server.
+The app's database is hosted on a GCP MySQL server.
 
 ## version 1.1:
-Added workout rating functionality and tests
+Added workout rating functionality and related tests.
 
 
 ## Getting started with your own copy
@@ -87,14 +86,11 @@ The app also models a many-to-many relationship between Workouts and Exercises u
 ##### v1.1
 Each workout can now have one rating assigned to it and each rating must have a unique workout id.
 
-## Continuous Integration
-The web app uses Jenkins, as its CI server. Changes made to the master branch of this repository are automatically detected (using webhooks), triggering automated testing, which (if successful) triggers the restart of the application.
-
 ## Project Tracking
-Project management was conducted using a Trello (kanban) board, with a MOSCOW system indicating the importance of each task. The board can be accessed [here](https://trello.com/b/RqNvjEBM/feats-of-strength)
+Project management was conducted using a Trello (kanban) board, with a MOSCOW system indicating the importance of each task. The board can be accessed [here](https://trello.com/b/RqNvjEBM/feats-of-strength).
 
 ## Risk Assessment
-The final document can be found [here](https://drive.google.com/file/d/1-GfLXsC_jvMjW4AnRw3JfweoX_0BB4g0/view?usp=sharing)
+The final document can be found [here](https://drive.google.com/file/d/1-GfLXsC_jvMjW4AnRw3JfweoX_0BB4g0/view?usp=sharing).
 
 ### Initial Risk Assessment
 Before any project work began, an initial risk assessment was conducted to identify any risks and potential mitigation strategies:
@@ -113,13 +109,18 @@ pytest
 
 The unit tests cover registration, login, workout generation, workout deletion, workout update and workout review (v1.1) functionalities.
 ![coverage](https://i.imgur.com/qSfEUmT.png)
+
 Alternatively, the latest test coverage report can be viewed [here](http://35.242.145.187:5000/coverage).
 The integration tests currently cover registration, workout generation and workout updating functionalities.
 
 ### Testing Improvements
 Further integration tests must be developed for the workout deletion and workout review (v1.1) functionalities.
 
-## Overall Workflow
+## Continuous Integration
+The web app uses Jenkins, as its CI server. Changes made to the master branch of this repository are automatically detected (using webhooks), triggering automated testing, which (if successful) triggers the restart of the application.
+
+
+## Overall Workflow (project conception to minimum viable project)
 ![Workflow](https://i.imgur.com/DUL0CbH.png)
 
 ## Potential Improvements

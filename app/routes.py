@@ -29,7 +29,7 @@ def add_exercises():
 @app.route('/')
 @app.route('/home/')
 def home():
-    reviewData = Reviews.query.all()
+    reviewData = Reviews.query.order_by(Reviews.workoutid.desc()).all()
     return render_template('home.html', title= 'Home', reviews= reviewData)
 
 @app.route('/about')
