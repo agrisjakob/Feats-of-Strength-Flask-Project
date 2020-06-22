@@ -43,3 +43,8 @@ class LoginForm(FlaskForm):
 class UpdateRepsForm(FlaskForm):
     deleteWorkout= BooleanField('Delete latest workout')
     submit = SubmitField('Submit')
+
+class ReviewForm(FlaskForm):
+    rating = IntegerField('Rate your latest workout(1-10): ', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+

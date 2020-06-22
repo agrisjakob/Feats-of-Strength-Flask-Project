@@ -36,6 +36,7 @@ class Workout(db.Model):
         new_workout = self(userid = current_user.userid)
         db.session.add(new_workout)
         db.session.commit()
+    review= db.relationship('Reviews', backref='rev', lazy=True)
     workout = db.relationship("Exercises", secondary="exercises_in_workout")
     def __repr__(self):
         return ''.join([
@@ -60,3 +61,11 @@ class ExercisesInWorkout(db.Model):
     reps_completed = db.Column(db.Integer, nullable=False, default =0)
     userWorkout = db.relationship("Workout", backref=db.backref("userworkout", lazy = 'dynamic'))
     userExercise = db.relationship("Exercises", backref=db.backref("userexercise", lazy = 'dynamic'))
+
+
+class Reviews(db.Model):
+    id = db.Column(db.Integer, primary_key =True)
+    workoutid = db.Column(db.Integer, db.ForeignKey('workout.workoutid'), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    reviewDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+

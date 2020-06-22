@@ -2,7 +2,13 @@
 
 FOS is a Python web application, constructed using the Flask web framework. It allows you to provide tailor-made workout plans for a specific feat of strength, such as one-handed pushups. Users must register before using the app in order to generate workout plans suited to each user's ability. Users can store, edit and delete these workouts. The app comes with pre-made unit and integration tests, that can be used as a trigger for a continuous integration pipeline.
 This app is ran on a Google Cloud Platform Ubuntu 18.04 virtual machine, using the Python-based HTTP web server Gunicorn.
+
 The database is hosted on a GCP MySQL server.
+
+## version 1.1:
+Added workout rating functionality and tests
+
+
 ## Getting started with your own copy
 To get a working copy of the project, simply pull down the repository and use the requirements.txt file (found in the root) to install the necessary python modules:
 
@@ -53,6 +59,9 @@ Users can log out of their accounts by pressing the 'Logout' button, which is al
 
 ![Logout](https://i.imgur.com/cTkhWcR.png)
 
+### Workout Ratings (v1.1)
+Users can rate their latest workout by following the "Review Latest Workout" link on the Workout Log Page. Users are then asked to give their latest workout a rating from 1-10. If a workout is given a rating, a message will show up on the home feed saying: "A user rated their workout as x/10 on date time". The same workout can not be rated twice.
+
 ## Architecture
 ### Database Structure
 Please find below the progression of the app's entity relationship diagram from the conception of the idea through to implementation:
@@ -64,12 +73,19 @@ Please find below the progression of the app's entity relationship diagram from 
 The initial ERD design was not fit for the intended many-to-many relationship between the workout and exercises tables. Whereas, this design solves those issues. 
 ![ERD Progression](https://i.imgur.com/LFmVKUl.png)
 
-#### Final ERD (currently implemented)
+#### Final ERD (v1.0) 
 This version of the ERD got rid of unnecessary columns and assigned the Exercises In Workouts table a PK, to get around errors during workout creation.
 ![Final ERD](https://i.imgur.com/EvltqW6.png)
 
+#### Final ERD (v1.1)
+This ERD was implemented in version 1.1, as a part of the workout ratings functionality.
+![ERD 1.1](https://i.imgur.com/2TcCdBR.png)
+
 #### ERD Functionality
-The app models a many-to-many relationship between Workouts and Exercises using an association table. This allows for the generation of custom workouts, using a list of exercises found in the exercise table that are matched to a workout ID and each workout ID is assigned to one user.
+Each user is assigned a workout id upon workout generation, a user can have many workout ids, but each workout id is unique to one user.
+The app also models a many-to-many relationship between Workouts and Exercises using an association table. This allows for the generation of custom workouts, using a list of exercises found in the exercise table that are matched to a workout ID and each workout ID is assigned to one user.
+##### v1.1
+Each workout can now have one rating assigned to it and each rating must have a unique workout id.
 
 ## Continuous Integration
 The web app uses Jenkins, as its CI server. Changes made to the master branch of this repository are automatically detected (using webhooks), triggering automated testing, which (if successful) triggers the restart of the application.
@@ -94,10 +110,14 @@ The app comes with unit tests (pytest) and integration tests (selenium), coverin
 ```bash
 pytest
 ```
-The tests cover registration, login, workout generation, workout deletion and workout update functionalities:
-![coverage](https://i.imgur.com/qSfEUmT.png)
 
-Alternatively, the test coverage can be viewed [here](http://35.242.145.187:5000/coverage)
+The unit tests cover registration, login, workout generation, workout deletion, workout update and workout review (v1.1) functionalities.
+![coverage](https://i.imgur.com/qSfEUmT.png)
+Alternatively, the latest test coverage report can be viewed [here](http://35.242.145.187:5000/coverage).
+The integration tests currently cover registration, workout generation and workout updating functionalities.
+
+### Testing Improvements
+Further integration tests must be developed for the workout deletion and workout review (v1.1) functionalities.
 
 ## Overall Workflow
 ![Workflow](https://i.imgur.com/DUL0CbH.png)
@@ -112,6 +132,11 @@ User levels should increase once they've managed to do a certain numbers of reps
 ### Injury prevention page
 The app needs an injury prevention page, which provides information for preventing, identifying and dealing with injuries.
 
-### Home page content
+### Home page community content
 The home page could use some sort of hi-scores table or top 20 most recently finished workouts table, so that users can see others participating and progressing.
 
+### Account page
+The app needs a user account page, in which users could update or delete their user information. This would also include their date of birth, which currently exists on the database as a default entry for when the user registered.
+
+### Workout Ratings (v1.1)
+The workout ratings form needs a custom error validation function to prevent users from rating a workout outside of the 1-10 range. Furthermore, the ratings displayed on the home page could use some more information about the workouts, such as the exercise that the rated workout involved.
