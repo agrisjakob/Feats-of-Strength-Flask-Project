@@ -144,7 +144,14 @@ class TestViews(TestBase):
                         password ="test"), follow_redirects=True)
             response= self.client.get('/update/1')
             self.assertEqual(response.status_code, 200)
-
+    def test_ratings_view(self):
+        with self.client:
+            self.client.post('/login',
+                data=dict(
+                username ="test",
+                password ="test"), follow_redirects=True)
+            response= self.client.get('/review/1')
+            self.assertEqual(response.status_code, 200)
 class TestFunctionality(TestBase):
 
     def test_login(self):
@@ -286,6 +293,17 @@ class TestFunctionality(TestBase):
             db.session.delete(usersWorkoutid)
             response= self.client.get('/workout')
             self.assertRedirects(response, '/workout')
+
+    def test_adding_a_rating(self):
+        with self.client:
+            self.client.post('/login',
+                    data=dict(
+                        username ="test",
+                        password ="test"), follow_redirects=True)
+            response = self.client.post('/review/1', data=dict(
+                rating = 7))
+            self.assertRedirects(response, '/home/')
+
 class TestRedirects(TestBase):
     
     def test_redirect_to_workoutlog_when_submit_workout(self):
