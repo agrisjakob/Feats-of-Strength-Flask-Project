@@ -86,9 +86,6 @@ The app also models a many-to-many relationship between Workouts and Exercises u
 ##### v1.1
 Each workout can now have one rating assigned to it and each rating must have a unique workout id.
 
-## Continuous Integration
-The web app uses Jenkins, as its CI server. Changes made to the master branch of this repository are automatically detected (using webhooks), triggering automated testing, which (if successful) triggers the restart of the application.
-
 ## Project Tracking
 Project management was conducted using a Trello (kanban) board, with a MOSCOW system indicating the importance of each task. The board can be accessed [here](https://trello.com/b/RqNvjEBM/feats-of-strength).
 
@@ -112,13 +109,18 @@ pytest
 
 The unit tests cover registration, login, workout generation, workout deletion, workout update and workout review (v1.1) functionalities.
 ![coverage](https://i.imgur.com/qSfEUmT.png)
+
 Alternatively, the latest test coverage report can be viewed [here](http://35.242.145.187:5000/coverage).
 The integration tests currently cover registration, workout generation and workout updating functionalities.
 
 ### Testing Improvements
 Further integration tests must be developed for the workout deletion and workout review (v1.1) functionalities.
 
-## Overall Workflow
+## Continuous Integration
+The web app uses Jenkins, as its CI server. Changes made to the master branch of this repository are automatically detected (using webhooks), triggering automated testing, which (if successful) triggers the restart of the application.
+
+
+## Overall Workflow (project conception to minimum viable project)
 ![Workflow](https://i.imgur.com/DUL0CbH.png)
 
 ## Potential Improvements
