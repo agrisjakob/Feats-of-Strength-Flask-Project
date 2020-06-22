@@ -3,8 +3,11 @@
 FOS is a Python web application, constructed using the Flask web framework. It allows you to provide tailor-made workout plans for a specific feat of strength, such as one-handed pushups. Users must register before using the app in order to generate workout plans suited to each user's ability. Users can store, edit and delete these workouts. The app comes with pre-made unit and integration tests, that can be used as a trigger for a continuous integration pipeline.
 This app is ran on a Google Cloud Platform Ubuntu 18.04 virtual machine, using the Python-based HTTP web server Gunicorn.
 
+The database is hosted on a GCP MySQL server.
+
 ## version 1.1:
 Added workout rating functionality and tests
+
 
 ## Getting started with your own copy
 To get a working copy of the project, simply pull down the repository and use the requirements.txt file (found in the root) to install the necessary python modules:
@@ -17,6 +20,7 @@ pip install -r requirements.txt
 [WebApp](http://35.242.145.187:5000/)
 
 [Trello Board](https://trello.com/b/RqNvjEBM/feats-of-strength)
+
 
 ## Functionality
 ### Registration
@@ -106,12 +110,17 @@ The app comes with unit tests (pytest) and integration tests (selenium), coverin
 ```bash
 pytest
 ```
+
 The unit tests cover registration, login, workout generation, workout deletion, workout update and workout review (v1.1) functionalities.
-The latest test coverage report can be viewed [here](http://35.242.145.187:5000/coverage).
+![coverage](https://i.imgur.com/qSfEUmT.png)
+Alternatively, the latest test coverage report can be viewed [here](http://35.242.145.187:5000/coverage).
 The integration tests currently cover registration, workout generation and workout updating functionalities.
 
 ### Testing Improvements
 Further integration tests must be developed for the workout deletion and workout review (v1.1) functionalities.
+
+## Overall Workflow
+![Workflow](https://i.imgur.com/DUL0CbH.png)
 
 ## Potential Improvements
 ### Delete/update any workout functionality
