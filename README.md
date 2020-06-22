@@ -6,7 +6,7 @@ This app is ran on a Google Cloud Platform Ubuntu 18.04 virtual machine, using t
 The database is hosted on a GCP MySQL server.
 
 ## version 1.1:
-Added workout rating functionality and tests
+Added workout rating functionality and related tests.
 
 
 ## Getting started with your own copy
@@ -91,10 +91,10 @@ Each workout can now have one rating assigned to it and each rating must have a 
 The web app uses Jenkins, as its CI server. Changes made to the master branch of this repository are automatically detected (using webhooks), triggering automated testing, which (if successful) triggers the restart of the application.
 
 ## Project Tracking
-Project management was conducted using a Trello (kanban) board, with a MOSCOW system indicating the importance of each task. The board can be accessed [here](https://trello.com/b/RqNvjEBM/feats-of-strength)
+Project management was conducted using a Trello (kanban) board, with a MOSCOW system indicating the importance of each task. The board can be accessed [here](https://trello.com/b/RqNvjEBM/feats-of-strength).
 
 ## Risk Assessment
-The final document can be found [here](https://drive.google.com/file/d/1-GfLXsC_jvMjW4AnRw3JfweoX_0BB4g0/view?usp=sharing)
+The final document can be found [here](https://drive.google.com/file/d/1-GfLXsC_jvMjW4AnRw3JfweoX_0BB4g0/view?usp=sharing).
 
 ### Initial Risk Assessment
 Before any project work began, an initial risk assessment was conducted to identify any risks and potential mitigation strategies:
