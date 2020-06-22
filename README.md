@@ -128,3 +128,6 @@ The home page could use some sort of hi-scores table or top 20 most recently fin
 
 ### Account page
 The app needs a user account page, in which users could update or delete their user information. This would also include their date of birth, which currently exists on the database as a default entry for when the user registered.
+
+### Workout Ratings (v1.1)
+The workout ratings form needs a custom error validation function to prevent users from rating a workout outside of the 1-10 range. Furthermore, the ratings displayed on the home page could use some more information about the workouts, such as the exercise that the rated workout involved.
